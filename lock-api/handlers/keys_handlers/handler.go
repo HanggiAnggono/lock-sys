@@ -12,6 +12,7 @@ func GetKeys(ctx *gin.Context) {
 
 	if err != nil {
 		ctx.JSON(500, gin.H{"error": err.Error()})
+		return
 	}
 
 	ctx.JSON(200, gin.H{"data": keys})
@@ -22,6 +23,7 @@ func GetKey(ctx *gin.Context) {
 
 	if err != nil {
 		ctx.JSON(500, gin.H{"error": err.Error()})
+		return
 	}
 
 	ctx.JSON(200, gin.H{"data": key})
@@ -34,6 +36,7 @@ func CreateKey(ctx *gin.Context) {
 
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 
 	ctx.JSON(200, gin.H{"data": key})
@@ -46,6 +49,7 @@ func UpdateKey(ctx *gin.Context) {
 
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 
 	ctx.JSON(200, gin.H{"data": key})
@@ -56,6 +60,7 @@ func DeleteKey(ctx *gin.Context) {
 
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 
 	ctx.JSON(200, gin.H{"data": "Key deleted"})
