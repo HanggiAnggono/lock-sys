@@ -26,7 +26,8 @@ func GetKeys(ctx *gin.Context) (common.Meta, error) {
 
 func GetKey(id string) (models.Key, error) {
 	var key models.Key
-	err := database.DB.Find(&key, id).Error
+	err := database.DB.Model(&models.Key{}).Preload("Copies").Find(&key, id).Error
+
 	return key, err
 }
 

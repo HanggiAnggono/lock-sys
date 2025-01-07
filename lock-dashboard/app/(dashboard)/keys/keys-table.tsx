@@ -45,6 +45,16 @@ const columns = [
   }),
   columnHelper.accessor('label', {
     header: 'Label'
+  }),
+  columnHelper.display({
+    id: 'actions',
+    cell: ({ row }) => {
+      return (
+        <Link href={`/keys/${row.original.ID}`}>
+          <Button>Details</Button>
+        </Link>
+      );
+    }
   })
 ];
 

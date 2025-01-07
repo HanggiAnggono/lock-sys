@@ -7,5 +7,6 @@ import (
 type Key struct {
 	gorm.Model
 	Label string `json:"label"`
-	Copies []KeyCopies `gorm:"foreignKey:MasterKeyID"`
+	Description string `json:"description"`
+	Copies []KeyCopies `json:"copies" gorm:"foreignKey:MasterKeyID"`
 }
