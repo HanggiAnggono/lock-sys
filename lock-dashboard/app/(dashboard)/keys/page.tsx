@@ -2,9 +2,9 @@ import { getKeys } from '@/lib/modules/keys/service';
 import { KeysTable } from './keys-table';
 
 export default async function Keys({ searchParams }) {
-  const { page, pageSize } = await searchParams;
+  const { page, pageSize, q } = await searchParams;
 
-  const resp = await getKeys({ page, pageSize });
+  const resp = await getKeys({ page, pageSize, q });
   const { data: keys, totalItems, totalPage, currentPage } = resp;
 
   return (

@@ -30,6 +30,7 @@ import {
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { Input } from '@/components/ui/input';
 
 type Key = {
   ID: string;
@@ -76,8 +77,24 @@ export function KeysTable({
     router.replace(`${pathname}?page=1&pageSize=${value}`);
   }
 
+  function handleSearch(e) {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const q = formData.get('q') as string;
+    params.set('q', q);
+    router.push(`${pathname}?${params.toString()}`);
+  }
+
   return (
     <div className="mt-4">
+      <form onSubmit={handleSearch} className="mb-4">
+        <Input
+          name="q"
+          type="search"
+          placeholder="Search..."
+          className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
+        />
+      </form>
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

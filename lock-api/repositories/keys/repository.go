@@ -15,8 +15,9 @@ func GetKeys(ctx *gin.Context) (common.Meta, error) {
 		return common.Meta{}, err
 	}
 
+	q := ctx.Query("q")
 	meta := common.PaginationMeta(totalCount, ctx)
-	err = database.DB.Scopes(common.Paginate(ctx)).Find(&keys).Error
+	err = database.DB.Scopes(common.Paginate(ctx)).Where("label ILIKE ?", "%"+q+"%").Find(&keys).Error
 
 	meta.Data = keys
 
