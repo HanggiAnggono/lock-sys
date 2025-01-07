@@ -1,6 +1,7 @@
 package copies_handlers
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -16,7 +17,7 @@ func GetKeyCopies(ctx *gin.Context) {
 	log.Println(copies)
 
 	if err != nil {
-		ctx.JSON(500, gin.H{"error": err.Error()})
+		ctx.AbortWithStatusJSON(500, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -25,25 +26,27 @@ func GetKeyCopies(ctx *gin.Context) {
 
 func CreateKeyCopy(ctx *gin.Context) {
 	var data keycopies.CreateKeyCopiesData
+	fmt.Printf("Data: %+v\n", data)
 
 	if err := ctx.BindJSON(&data); err != nil {
 		ctx.JSON(400, gin.H{"error": err.Error()})
 	}
 
 	if err := models.Validate.Struct(&data); err != nil {
-		errors := make(map[string]string)
+		errors := []string{}
 		for _, validationErr := range err.(validator.ValidationErrors) {
-			errors[validationErr.Field()] = validationErr.Error()
+			fmt.Printf("validationErr %v \n", validationErr);
+			errors = append(errors, validationErr.Error())
 		}
 
-		ctx.JSON(400, gin.H{"error": errors})
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, errors)
 		return
 	}
 
 	copy, err := keycopies.CreateKeyCopies(&data)
 
 	if err != nil {
-		ctx.JSON(500, gin.H{"error": err.Error()})
+		ctx.AbortWithStatusJSON(500, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -54,7 +57,7 @@ func DeleteCopy(ctx *gin.Context) {
 	err := keycopies.DeleteKeyCopies(ctx.Param("id"))
 
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 

@@ -9,6 +9,8 @@ import {
 import { getKeyById } from '@/lib/modules/keys/service';
 import Link from 'next/link';
 import CopiesGrid from './copies-grid';
+import { Button } from '@/components/ui/button';
+import { PlusIcon } from 'lucide-react';
 
 export default async function KeyDetail({
   params
@@ -23,9 +25,7 @@ export default async function KeyDetail({
       <Breadcrumb className="mb-4">
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink asChild href="/keys">
-              <Link href="/keys">Keys</Link>
-            </BreadcrumbLink>
+            <BreadcrumbLink href="/keys">Keys</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
@@ -33,7 +33,15 @@ export default async function KeyDetail({
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <h1 className="text-xl font-bold">{key.label}</h1>
+      <div className="flex justify-between">
+        <h1 className="text-xl font-bold">{key.label}</h1>
+        <Link href={`/keys/${keyId}/copies/new`}>
+          <Button>
+            <PlusIcon className="mr-2 h-4 w-4" />
+            Create Copy
+          </Button>
+        </Link>
+      </div>
 
       <div className="my-10">
         {key !== null && <CopiesGrid masterKeyId={keyId} copies={key.copies} />}

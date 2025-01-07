@@ -13,13 +13,15 @@ func GetKeyCopies(id string) ([]models.KeyCopies, error) {
 
 type CreateKeyCopiesData struct {
 	KeyID       string `json:"key_id" validate:"required"`
-	MasterKeyID uint   `json:"master_key_id" validate:"required"`
+	MasterKeyID uint   `json:"master_key_id" validate:"required,gte=1"`
+	Description string `json:"description" validate:"required"`
 }
 
 func CreateKeyCopies(data *CreateKeyCopiesData) (models.KeyCopies, error) {
 	var keyCopies models.KeyCopies = models.KeyCopies{
 		KeyID:       data.KeyID,
 		MasterKeyID: data.MasterKeyID,
+		Description: data.Description,
 	}
 
 	err := database.DB.Create(&keyCopies).Error

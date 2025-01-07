@@ -1,24 +1,12 @@
 import { apiFetch } from '@/lib/api';
+import { Copy as KeyCopy } from '../key_copies/service';
 
-type Key = {
+export type Key = {
   ID: string;
   label: string;
 };
 
-export type Copy = {
-  ID: string;
-  key_id: string;
-  master_key_id: string;
-  description: string;
-  status:
-    | 'AVAILABLE'
-    | 'CHECKED_OUT'
-    | 'LOST'
-    | 'DAMAGED'
-    | 'STOLEN'
-    | 'RETIRED'
-    | 'DESTROYED';
-};
+export type Copy = KeyCopy;
 
 export function getKeys({ page = 1, pageSize = 10, q = '' }): Promise<{
   data: Key[];

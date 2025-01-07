@@ -11,22 +11,22 @@ func GetKeys(ctx *gin.Context) {
 	keys, err := keys_repository.GetKeys(ctx)
 
 	if err != nil {
-		ctx.JSON(500, gin.H{"error": err.Error()})
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	ctx.JSON(200, gin.H{"data": keys})
+	ctx.JSON(http.StatusOK, gin.H{"data": keys})
 }
 
 func GetKey(ctx *gin.Context) {
 	key, err := keys_repository.GetKey(ctx.Param("id"))
 
 	if err != nil {
-		ctx.JSON(500, gin.H{"error": err.Error()})
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	ctx.JSON(200, gin.H{"data": key})
+	ctx.JSON(http.StatusOK, gin.H{"data": key})
 }
 
 func CreateKey(ctx *gin.Context) {
@@ -35,11 +35,11 @@ func CreateKey(ctx *gin.Context) {
 	key, err := keys_repository.CreateKey(&data)
 
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	ctx.JSON(200, gin.H{"data": key})
+	ctx.JSON(http.StatusOK, gin.H{"data": key})
 }
 
 func UpdateKey(ctx *gin.Context) {
@@ -48,20 +48,20 @@ func UpdateKey(ctx *gin.Context) {
 	key, err := keys_repository.UpdateKey(ctx.Param("id"), &data)
 
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	ctx.JSON(200, gin.H{"data": key})
+	ctx.JSON(http.StatusOK, gin.H{"data": key})
 }
 
 func DeleteKey(ctx *gin.Context) {
 	err := keys_repository.DeleteKey(ctx.Param("id"))
 
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	ctx.JSON(200, gin.H{"data": "Key deleted"})
+	ctx.JSON(http.StatusOK, gin.H{"data": "Key deleted"})
 }
