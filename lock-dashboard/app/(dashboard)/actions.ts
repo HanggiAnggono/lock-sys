@@ -2,8 +2,33 @@
 
 import { apiFetch } from '@/lib/api';
 import { createKeyCopy } from '@/lib/modules/key_copies/service';
+import { createKeyService } from '@/lib/modules/keys/service';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+
+export async function createKeyAction(prev, formData: FormData) {
+  const label = formData.get('label')?.toString();
+  const description = formData.get('description')?.toString();
+  let resp;
+
+  if (!label) {
+    return { ...prev, success: false, error: 'Label is required', formData };
+  }
+
+  try {
+    resp = await createKeyService({ label, description });
+  } catch (error) {
+    throw error;
+    return {
+      ...prev,
+      success: false,
+      error: error,
+      formData
+    };
+  }
+
+  redirect(`/keys/${resp.ID}`);
+}
 
 export async function createCopy(prev, formData: FormData) {
   let state = { ...prev };

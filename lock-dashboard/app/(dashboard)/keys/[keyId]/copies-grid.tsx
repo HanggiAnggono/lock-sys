@@ -22,6 +22,11 @@ export default function CopiesGrid({
   return (
     <div>
       <h1 className="text-xl font-bold mb-4">Copies</h1>
+      {copies.length === 0 ? (
+        <div className="flex justify-center items-center">
+          <p>This Key doesn't has any copies</p>
+        </div>
+      ) : null}
       <div className="grid grid-cols-3 gap-4">
         {copies.map((copy) => (
           <div key={copy.key_id}>

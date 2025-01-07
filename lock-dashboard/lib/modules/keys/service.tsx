@@ -32,3 +32,14 @@ export function getKeyById(id: string): Promise<
 > {
   return apiFetch(`/api/v1/keys/${id}`).then((res) => res.data);
 }
+
+export async function createKeyService(payload: {
+  label: string;
+  description?: string;
+}): Promise<Key> {
+  const response = await apiFetch('/api/v1/keys', {
+    method: 'POST',
+    body: JSON.stringify(payload)
+  });
+  return response.data;
+}
