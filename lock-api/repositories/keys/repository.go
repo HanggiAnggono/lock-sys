@@ -1,14 +1,26 @@
 package keys_repository
 
 import (
+	"github.com/gin-gonic/gin"
 	"locksystem.com/lock-api/database"
 	"locksystem.com/lock-api/models"
+	"locksystem.com/lock-api/repositories/common"
 )
 
-func GetKeys() ([]models.Key, error) {
+func GetKeys(ctx *gin.Context) (common.Meta, error) {
 	var keys []models.Key
-	err := database.DB.Find(&keys).Error
-	return keys, err
+	var totalCount int64
+	err := database.DB.Model(&models.Key{}).Count(&totalCount).Error
+	if err != nil {
+		return common.Meta{}, err
+	}
+
+	meta := common.PaginationMeta(totalCount, ctx)
+	err = database.DB.Scopes(common.Paginate(ctx)).Find(&keys).Error
+
+	meta.Data = keys
+
+	return meta, err
 }
 
 func GetKey(id string) (models.Key, error) {

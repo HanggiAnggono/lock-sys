@@ -8,7 +8,7 @@ import (
 )
 
 func GetKeys(ctx *gin.Context) {
-	keys, err := keys_repository.GetKeys()
+	keys, err := keys_repository.GetKeys(ctx)
 
 	if err != nil {
 		ctx.JSON(500, gin.H{"error": err.Error()})
