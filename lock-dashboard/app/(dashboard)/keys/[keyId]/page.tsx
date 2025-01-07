@@ -36,7 +36,7 @@ export default async function KeyDetail({
       <h1 className="text-xl font-bold">{key.label}</h1>
 
       <div className="my-10">
-        <CopiesGrid copies={key.copies || []} />
+        {key !== null && <CopiesGrid masterKeyId={keyId} copies={key.copies} />}
       </div>
     </div>
   );

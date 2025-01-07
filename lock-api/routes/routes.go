@@ -28,6 +28,7 @@ func SetupRoutes(r *gin.Engine) {
 		apiV1.DELETE("/keys/:id", keys_handlers.DeleteKey)
 
 		apiV1.GET("/keys/:id/copies", copies_handlers.GetKeyCopies)
+		apiV1.DELETE("/copies/:id", copies_handlers.DeleteCopy)
 		apiV1.POST("/copies", copies_handlers.CreateKeyCopy)
 	}
 }

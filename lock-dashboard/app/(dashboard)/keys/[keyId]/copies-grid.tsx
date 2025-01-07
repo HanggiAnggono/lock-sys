@@ -1,3 +1,5 @@
+import { DeleteButton } from '@/components/delete-button';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -7,8 +9,16 @@ import {
   CardTitle
 } from '@/components/ui/card';
 import { Copy } from '@/lib/modules/keys/service';
+import { EditIcon } from 'lucide-react';
+import Link from 'next/link';
 
-export default function CopiesGrid({ copies = [] }: { copies: Copy[] }) {
+export default function CopiesGrid({
+  copies = [],
+  masterKeyId
+}: {
+  copies: Copy[];
+  masterKeyId: string;
+}) {
   return (
     <div>
       <h1 className="text-xl font-bold mb-4">Copies</h1>
@@ -25,7 +35,18 @@ export default function CopiesGrid({ copies = [] }: { copies: Copy[] }) {
               <CardContent>
                 <p>{copy.description}</p>
               </CardContent>
-              <CardFooter></CardFooter>
+              <CardFooter>
+                <Link href={`/keys/${masterKeyId}/copies/${copy.ID}/edit`}>
+                  <Button type="button" variant="ghost">
+                    <EditIcon />
+                  </Button>
+                </Link>
+                <DeleteButton
+                  key={copy.ID}
+                  deleteUrl={`/api/v1/copies/${copy.ID}`}
+                  revalidatePath={`/keys/${masterKeyId}`}
+                />
+              </CardFooter>
             </Card>
           </div>
         ))}

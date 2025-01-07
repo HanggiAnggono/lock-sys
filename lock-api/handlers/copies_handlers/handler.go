@@ -2,6 +2,7 @@ package copies_handlers
 
 import (
 	"log"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -47,4 +48,15 @@ func CreateKeyCopy(ctx *gin.Context) {
 	}
 
 	ctx.JSON(200, gin.H{"data": copy})
+}
+
+func DeleteCopy(ctx *gin.Context) {
+	err := keycopies.DeleteKeyCopies(ctx.Param("id"))
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(200, gin.H{"data": "Key deleted"})
 }
