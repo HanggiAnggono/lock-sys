@@ -1,6 +1,8 @@
 package keys_repository
 
 import (
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 	"locksystem.com/lock-api/database"
 	"locksystem.com/lock-api/models"
@@ -42,15 +44,19 @@ func CreateKey(data *CreateKeyData) (models.Key, error) {
 }
 
 type UpdateKeyData struct {
-	Label string `json:"label"`
+	Label       string `json:"label"`
+	Description string `json:"description"`
 }
 
 func UpdateKey(id string, data *UpdateKeyData) (models.Key, error) {
-	var key models.Key = models.Key{
-		Label: data.Label,
+	key := models.Key{
+		Label:       data.Label,
+		Description: data.Description,
 	}
+	ID, _ := strconv.Atoi(id)
+	key.ID = uint(ID)
 
-	err := database.DB.Model(&models.Key{}).Where("id = ?", id).Updates(&key).Error
+	err := database.DB.Save(&key).Error
 
 	return key, err
 }

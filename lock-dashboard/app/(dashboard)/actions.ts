@@ -2,11 +2,12 @@
 
 import { apiFetch } from '@/lib/api';
 import { createKeyCopy } from '@/lib/modules/key_copies/service';
-import { createKeyService } from '@/lib/modules/keys/service';
+import { createKeyService, updateKeyService } from '@/lib/modules/keys/service';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-export async function createKeyAction(prev, formData: FormData) {
+export async function saveKeyAction(prev, formData: FormData) {
+  const id = formData.get('id')?.toString();
   const label = formData.get('label')?.toString();
   const description = formData.get('description')?.toString();
   let resp;
@@ -16,18 +17,16 @@ export async function createKeyAction(prev, formData: FormData) {
   }
 
   try {
-    resp = await createKeyService({ label, description });
+    if (id) {
+      resp = await updateKeyService({ id, label, description });
+    } else {
+      resp = await createKeyService({ label, description });
+    }
+
+    return { ...prev, success: true, data: resp };
   } catch (error) {
     throw error;
-    return {
-      ...prev,
-      success: false,
-      error: error,
-      formData
-    };
   }
-
-  redirect(`/keys/${resp.ID}`);
 }
 
 export async function createCopy(prev, formData: FormData) {

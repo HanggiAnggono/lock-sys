@@ -4,6 +4,7 @@ import { Copy as KeyCopy } from '../key_copies/service';
 export type Key = {
   ID: string;
   label: string;
+  description: string;
 };
 
 export type Copy = KeyCopy;
@@ -39,6 +40,18 @@ export async function createKeyService(payload: {
 }): Promise<Key> {
   const response = await apiFetch('/api/v1/keys', {
     method: 'POST',
+    body: JSON.stringify(payload)
+  });
+  return response.data;
+}
+
+export async function updateKeyService(payload: {
+  id: string;
+  label: string;
+  description?: string;
+}): Promise<Key> {
+  const response = await apiFetch(`/api/v1/keys/${payload.id}`, {
+    method: 'PUT',
     body: JSON.stringify(payload)
   });
   return response.data;
