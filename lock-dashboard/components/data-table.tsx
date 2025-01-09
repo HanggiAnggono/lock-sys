@@ -26,6 +26,7 @@ import {
   SelectTrigger,
   SelectValue
 } from './ui/select';
+import { Input } from './ui/input';
 
 export function DataTable<T>({
   columns,
@@ -61,8 +62,25 @@ export function DataTable<T>({
     router.replace(`${pathname}?page=1&pageSize=${value}`);
   }
 
+  function handleSearch(e) {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const q = formData.get('q') as string;
+    params.set('q', q);
+    router.push(`${pathname}?${params.toString()}`);
+  }
+
   return (
     <div className="flex flex-col">
+      <form onSubmit={handleSearch} className="mb-4">
+        <Input
+          name="q"
+          type="search"
+          placeholder="Search..."
+          className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
+        />
+      </form>
+
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

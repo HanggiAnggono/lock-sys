@@ -25,6 +25,10 @@ export function getStaffs({ page = 1, pageSize = 10, q = '' }): Promise<{
   return apiFetch(path).then((res) => res.data);
 }
 
+export function getStaffById(id: string): Promise<Staff> {
+  return apiFetch(`/api/v1/staffs/${id}`).then((res) => res.data);
+}
+
 export async function createStaff(staff: Staff): Promise<Staff> {
   const response = await apiFetch('/api/v1/staffs', {
     method: 'POST',

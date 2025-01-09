@@ -6,7 +6,7 @@ import {
   BreadcrumbSeparator,
   BreadcrumbPage
 } from '@/components/ui/breadcrumb';
-import StaffForm from './staff-form';
+import StaffForm from '../staff-form';
 
 export default function NewStaffPage() {
   return (

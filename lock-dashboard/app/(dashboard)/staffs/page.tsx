@@ -10,8 +10,9 @@ import {
 import { Button } from '@/components/ui/button';
 import { getStaffs, Staff } from '@/lib/modules/staffs/service';
 import Link from 'next/link';
-import { PlusIcon } from 'lucide-react';
+import { EditIcon, PlusIcon } from 'lucide-react';
 import { DataTable } from '@/components/data-table';
+import StaffsTable from './staffs-table';
 
 export default async function Staffs({
   searchParams
@@ -54,30 +55,13 @@ export default async function Staffs({
         </Link>
       </div>
 
-      <DataTable
+      <StaffsTable
         data={staffs}
         currentPage={currentPage}
-        totalPage={totalPage}
         totalItems={totalItems}
-        columns={[
-          {
-            header: 'ID',
-            accessorKey: 'ID'
-          },
-          {
-            header: 'Name',
-            accessorKey: 'name'
-          },
-          {
-            header: 'Description',
-            accessorKey: 'description'
-          }
-        ]}
+        totalPage={totalPage}
       />
     </div>
   );
 }
 
-interface StaffsTableProps {
-  staffs: Staff[];
-}
