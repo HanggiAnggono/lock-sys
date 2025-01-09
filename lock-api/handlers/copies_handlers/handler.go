@@ -24,6 +24,18 @@ func GetKeyCopies(ctx *gin.Context) {
 	ctx.JSON(200, gin.H{"data": copies})
 }
 
+func GetKeyCopy(ctx *gin.Context) {
+	var masterKeyId = ctx.Param("id")
+	copy, err := keycopies.GetKeyCopy(masterKeyId)
+
+	if err != nil {
+		ctx.AbortWithStatusJSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(200, gin.H{"data": copy})
+}
+
 func CreateKeyCopy(ctx *gin.Context) {
 	var data keycopies.CreateKeyCopiesData
 	fmt.Printf("Data: %+v\n", data)
@@ -35,7 +47,7 @@ func CreateKeyCopy(ctx *gin.Context) {
 	if err := models.Validate.Struct(&data); err != nil {
 		errors := []string{}
 		for _, validationErr := range err.(validator.ValidationErrors) {
-			fmt.Printf("validationErr %v \n", validationErr);
+			fmt.Printf("validationErr %v \n", validationErr)
 			errors = append(errors, validationErr.Error())
 		}
 

@@ -5,11 +5,18 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Copy } from '@/lib/modules/key_copies/service';
 import { Key } from '@/lib/modules/keys/service';
 import { createCopy } from 'app/(dashboard)/actions';
 import { useActionState } from 'react';
 
-export default function CopyForm({ masterKey }: { masterKey: Key }) {
+export default function CopyForm({
+  masterKey,
+  copy
+}: {
+  masterKey: Key;
+  copy?: Copy;
+}) {
   const { ID: keyId, label } = masterKey;
 
   const [state, dispatch, pending] = useActionState(createCopy, {
@@ -18,6 +25,13 @@ export default function CopyForm({ masterKey }: { masterKey: Key }) {
     data: null,
     formData: new FormData()
   });
+
+  const formData = state.formData;
+  const defaultValue = {
+    master_key_id: keyId,
+    key_id: formData.get('key_id') || copy?.key_id || '',
+    description: formData.get('description') || copy?.description || ''
+  };
 
   return (
     <form className="flex flex-col" action={dispatch}>
@@ -48,7 +62,7 @@ export default function CopyForm({ masterKey }: { masterKey: Key }) {
           required
           name="key_id"
           placeholder="Key Label"
-          defaultValue={state.formData.get('key_id')?.toString()}
+          defaultValue={defaultValue.key_id}
         />
       </div>
       <div className="mb-4">
@@ -57,7 +71,7 @@ export default function CopyForm({ masterKey }: { masterKey: Key }) {
           name="description"
           placeholder="Description"
           rows={4}
-          defaultValue={state.formData.get('description')?.toString()}
+          defaultValue={defaultValue.description}
         />
       </div>
 

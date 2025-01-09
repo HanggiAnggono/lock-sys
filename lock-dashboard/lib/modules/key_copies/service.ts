@@ -20,6 +20,11 @@ export type CreateCopyPayload = {
   master_key_id: number;
 };
 
+// get copy by ID
+export function getCopyById(id: string): Promise<Copy> {
+  return apiFetch(`/api/v1/copies/${id}`).then((res) => res.data);
+}
+
 export async function createKeyCopy(payload: CreateCopyPayload) {
   const { key_id, description, master_key_id } = payload;
   try {

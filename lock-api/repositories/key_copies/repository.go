@@ -11,6 +11,13 @@ func GetKeyCopies(id string) ([]models.KeyCopies, error) {
 	return keyCopies, err
 }
 
+// Get copy by ID
+func GetKeyCopy(id string) (models.KeyCopies, error) {
+	var keyCopies models.KeyCopies
+	err := database.DB.Find(&keyCopies, "id = ?", id).Error
+	return keyCopies, err
+}
+
 type CreateKeyCopiesData struct {
 	KeyID       string `json:"key_id" validate:"required"`
 	MasterKeyID uint   `json:"master_key_id" validate:"required,gte=1"`

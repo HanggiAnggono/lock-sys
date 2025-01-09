@@ -41,7 +41,7 @@ export default function CopiesGrid({
                 <p>{copy.description}</p>
               </CardContent>
               <CardFooter>
-                <Link href={`/keys/${masterKeyId}/copies/${copy.ID}/edit`}>
+                <Link href={`/keys/${masterKeyId}/copies/${copy.ID}`}>
                   <Button type="button" variant="ghost">
                     <EditIcon />
                   </Button>
