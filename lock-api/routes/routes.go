@@ -5,6 +5,7 @@ import (
 	"locksystem.com/lock-api/database"
 	"locksystem.com/lock-api/handlers/copies_handlers"
 	"locksystem.com/lock-api/handlers/keys_handlers"
+	"locksystem.com/lock-api/handlers/staff_handlers"
 )
 
 func SetupRoutes(r *gin.Engine) {
@@ -12,7 +13,7 @@ func SetupRoutes(r *gin.Engine) {
 
 	{
 		apiV1.GET("/seeds", func(ctx *gin.Context) {
-			err := database.Seed()
+			err := database.Seed(database.DB)
 
 			if err != nil {
 				ctx.JSON(500, gin.H{"error": err.Error()})
@@ -31,5 +32,11 @@ func SetupRoutes(r *gin.Engine) {
 		apiV1.GET("/copies/:id", copies_handlers.GetKeyCopy)
 		apiV1.DELETE("/copies/:id", copies_handlers.DeleteCopy)
 		apiV1.POST("/copies", copies_handlers.CreateKeyCopy)
+
+		apiV1.GET("/staffs/:id", staff_handlers.GetStaffById)
+		apiV1.GET("/staffs", staff_handlers.GetStaff)
+		apiV1.POST("/staffs", staff_handlers.CreateStaff)
+		apiV1.PUT("/staffs/:id", staff_handlers.UpdateStaff)
+		apiV1.DELETE("/staffs/:id", staff_handlers.DeleteStaff)
 	}
 }

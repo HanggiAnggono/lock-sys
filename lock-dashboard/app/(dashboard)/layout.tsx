@@ -78,7 +78,7 @@ function DesktopNav() {
           <KeyIcon className="h-5 w-5" />
         </NavItem>
 
-        <NavItem href="/staff" label="Staffs">
+        <NavItem href="/staffs" label="Staffs">
           <UserIcon className="h-5 w-5" />
         </NavItem>
       </nav>
