@@ -12,7 +12,7 @@ import (
 func Paginated(model any, c *gin.Context, scopes func(*gorm.DB) *gorm.DB) (Meta, error) {
 	var totalCount int64
 	err := database.DB.Model(&model).Scopes(scopes).Count(&totalCount).Error
-	err = database.DB.Model(&model).Scopes(scopes).Find(&model).Error
+	err = database.DB.Model(&model).Scopes(scopes).Scopes(LimitOffset(c)).Find(&model).Error
 
 	meta := PaginationMeta(totalCount, c)
 	meta.Data = model
@@ -20,7 +20,7 @@ func Paginated(model any, c *gin.Context, scopes func(*gorm.DB) *gorm.DB) (Meta,
 	return meta, err
 }
 
-func Paginate(c *gin.Context) func(*gorm.DB) *gorm.DB {
+func LimitOffset(c *gin.Context) func(*gorm.DB) *gorm.DB {
 	return func(d *gorm.DB) *gorm.DB {
 		page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
 		pageSize, _ := strconv.Atoi(c.DefaultQuery("pageSize", "10"))
