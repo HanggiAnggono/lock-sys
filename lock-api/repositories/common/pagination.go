@@ -6,7 +6,19 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
+	"locksystem.com/lock-api/database"
 )
+
+func Paginated(model any, c *gin.Context, scopes func(*gorm.DB) *gorm.DB) (Meta, error) {
+	var totalCount int64
+	err := database.DB.Model(&model).Scopes(scopes).Count(&totalCount).Error
+	err = database.DB.Model(&model).Scopes(scopes).Find(&model).Error
+
+	meta := PaginationMeta(totalCount, c)
+	meta.Data = model
+
+	return meta, err
+}
 
 func Paginate(c *gin.Context) func(*gorm.DB) *gorm.DB {
 	return func(d *gorm.DB) *gorm.DB {

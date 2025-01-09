@@ -3,6 +3,7 @@ package staff
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"gorm.io/gorm"
 	"locksystem.com/lock-api/database"
 	models "locksystem.com/lock-api/models"
 	"locksystem.com/lock-api/repositories/common"
@@ -12,17 +13,10 @@ var validate = validator.New()
 
 func GetAllStaff(ctx *gin.Context) (common.Meta, error) {
 	var staffs []models.Staff
-	var totalCount int64
-	err := database.DB.Model(&models.Staff{}).Count(&totalCount).Error
-	if err != nil {
-		return common.Meta{}, err
-	}
-
 	q := ctx.Query("q")
-	meta := common.PaginationMeta(totalCount, ctx)
-	err = database.DB.Scopes(common.Paginate(ctx)).Where("name ILIKE ? OR description ILIKE ?", "%"+q+"%", "%"+q+"%").Find(&staffs).Error
-
-	meta.Data = staffs
+	meta, err := common.Paginated(staffs, ctx, func(d *gorm.DB) *gorm.DB {
+		return d.Where("name ILIKE ? OR description ILIKE ?", "%"+q+"%", "%"+q+"%")
+	})
 
 	return meta, err
 }

@@ -4,6 +4,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"locksystem.com/lock-api/database"
 	"locksystem.com/lock-api/models"
 	"locksystem.com/lock-api/repositories/common"
@@ -11,17 +12,10 @@ import (
 
 func GetKeys(ctx *gin.Context) (common.Meta, error) {
 	var keys []models.Key
-	var totalCount int64
-	err := database.DB.Model(&models.Key{}).Count(&totalCount).Error
-	if err != nil {
-		return common.Meta{}, err
-	}
-
 	q := ctx.Query("q")
-	meta := common.PaginationMeta(totalCount, ctx)
-	err = database.DB.Scopes(common.Paginate(ctx)).Where("label ILIKE ?", "%"+q+"%").Find(&keys).Error
-
-	meta.Data = keys
+	meta, err := common.Paginated(keys, ctx, func(d *gorm.DB) *gorm.DB {
+		return d.Where("label ILIKE ?", "%"+q+"%")
+	})
 
 	return meta, err
 }
