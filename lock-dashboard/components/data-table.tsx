@@ -36,7 +36,7 @@ export function DataTable<T>({
   currentPage,
   manualFiltering = false
 }: {
-  columns: ColumnDef<T>[];
+  columns: ColumnDef<T, any>[];
   data: T[];
   totalItems: number;
   totalPage: number;
