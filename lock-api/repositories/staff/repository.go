@@ -34,7 +34,7 @@ func GetStaffByID(id string) (models.Staff, error) {
 }
 
 func CreateStaff(payload *CreateStaffPayload) (models.Staff, error) {
-	staff := models.Staff{Name: payload.Name}
+	staff := models.Staff{Name: payload.Name, Description: payload.Description}
 	if err := validate.Struct(payload); err != nil {
 		return staff, err
 	}
@@ -45,7 +45,10 @@ func UpdateStaff(payload *UpdateStaffPayload) (models.Staff, error) {
 	if err := validate.Struct(payload); err != nil {
 		return models.Staff{}, err
 	}
-	staff := models.Staff{Name: payload.Name}
+	staff := models.Staff{
+		Name:        payload.Name,
+		Description: payload.Description,
+	}
 	result := database.DB.Model(&models.Staff{}).Where("id = ?", payload.ID).Updates(staff)
 	return staff, result.Error
 }
@@ -55,12 +58,12 @@ func DeleteStaff(id string) error {
 }
 
 type CreateStaffPayload struct {
-	Name  string `validate:"required"`
-	Email string `validate:"required,email"`
+	Name        string `json:"name" validate:"required"`
+	Description string `json:"description"`
 }
 
 type UpdateStaffPayload struct {
-	ID    uint   `validate:"required"`
-	Name  string `validate:"required"`
-	Email string `validate:"required,email"`
+	ID          uint   `json:"id" validate:"required"`
+	Name        string `json:"name" validate:"required"`
+	Description string `json:"description"`
 }

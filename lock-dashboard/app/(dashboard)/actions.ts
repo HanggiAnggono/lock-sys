@@ -3,6 +3,7 @@
 import { apiFetch } from '@/lib/api';
 import { createKeyCopy } from '@/lib/modules/key_copies/service';
 import { createKeyService, updateKeyService } from '@/lib/modules/keys/service';
+import { createStaff, updateStaff } from '@/lib/modules/staffs/service';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
@@ -78,5 +79,32 @@ export async function deleteCopy(prev, formData: FormData) {
     return { success: true, error: null };
   } catch (error) {
     return { success: false, error: `error: ${error.message}` };
+  }
+}
+
+export async function saveStaffAction(prev, formData: FormData) {
+  const {
+    ID: id,
+    name,
+    description
+  } = Object.fromEntries(Array.from(formData.entries())) as unknown as {
+    ID: string;
+    name: string;
+    description: string;
+  };
+
+  try {
+    let data;
+    if (id) {
+      data = await updateStaff({ ID: id, name, description });
+      revalidatePath(`/staffs/${id}`);
+    } else {
+      data = await createStaff({ ID: id, name, description });
+      revalidatePath('/staffs');
+    }
+
+    return { ...prev, data, success: true };
+  } catch (error) {
+    return { ...prev, data: null, success: false, error };
   }
 }

@@ -11,16 +11,24 @@ import { Button } from '@/components/ui/button';
 import { getStaffs, Staff } from '@/lib/modules/staffs/service';
 import Link from 'next/link';
 import { PlusIcon } from 'lucide-react';
-import {
-  Table,
-  TableHeader,
-  TableRow,
-  TableCell,
-  TableBody
-} from '@/components/ui/table';
+import { DataTable } from '@/components/data-table';
 
-export default async function Staffs() {
-  const { data: staffs = [] } = await getStaffs();
+export default async function Staffs({
+  searchParams
+}: Promise<{
+  searchParams: {
+    page: string;
+    pageSize: string;
+    q: string;
+  };
+}>) {
+  const { page, pageSize, q } = await searchParams;
+  const {
+    data: staffs = [],
+    currentPage,
+    totalItems,
+    totalPage
+  } = await getStaffs({ page, pageSize, q: q || '' });
 
   return (
     <div>
@@ -46,34 +54,30 @@ export default async function Staffs() {
         </Link>
       </div>
 
-      <StaffsTable staffs={staffs} />
+      <DataTable
+        data={staffs}
+        currentPage={currentPage}
+        totalPage={totalPage}
+        totalItems={totalItems}
+        columns={[
+          {
+            header: 'ID',
+            accessorKey: 'ID'
+          },
+          {
+            header: 'Name',
+            accessorKey: 'name'
+          },
+          {
+            header: 'Description',
+            accessorKey: 'description'
+          }
+        ]}
+      />
     </div>
   );
 }
 
 interface StaffsTableProps {
   staffs: Staff[];
-}
-
-function StaffsTable({ staffs }: StaffsTableProps) {
-  return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableCell>ID</TableCell>
-          <TableCell>Name</TableCell>
-          <TableCell>Description</TableCell>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {staffs.map((staff) => (
-          <TableRow key={staff.ID}>
-            <TableCell>{staff.ID}</TableCell>
-            <TableCell>{staff.name}</TableCell>
-            <TableCell>{staff.description || '-'}</TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  );
 }
