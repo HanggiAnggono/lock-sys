@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { createColumnHelper } from '@tanstack/react-table';
 import Link from 'next/link';
 import { DataTable } from '@/components/data-table';
-import { EditIcon } from 'lucide-react';
+import { EditIcon, EyeIcon } from 'lucide-react';
 import { DeleteButton } from '@/components/delete-button';
 
 type Key = {
@@ -18,13 +18,23 @@ const columns = [
     header: 'ID'
   }),
   columnHelper.accessor('label', {
-    header: 'Label'
+    header: 'Label',
+    cell: (info) => {
+      return (
+        <Link href={`/keys/${info.row.original.ID}`}>{info.getValue()}</Link>
+      );
+    }
   }),
   columnHelper.display({
     id: 'actions',
     cell: ({ row }) => {
       return (
         <div className="flex items-center">
+          <Link href={`/keys/${row.original.ID}`}>
+            <Button variant="ghost">
+              <EyeIcon />
+            </Button>
+          </Link>
           <Link href={`/keys/${row.original.ID}/edit`}>
             <Button variant="ghost">
               <EditIcon />
